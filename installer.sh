@@ -105,6 +105,11 @@ function install_navex() {
     echo "> Cancelled."
   else
     echo "moving files to /usr/local/bin/navex"
+
+    if [ ! -d /usr/local/bin/navex ]; then
+        mkdir -p /usr/local/bin/navex
+    fi
+
     mv navex.sh /usr/local/bin/navex
     mv core /usr/local/bin/navex
     delete_unused_files
