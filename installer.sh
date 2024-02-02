@@ -98,7 +98,7 @@ function delete_unused_files() {
     echo "> Cancelled."
   else
     path=$(pwd)
-    echo "> Deleting files of $path/navex"
+    echo "> Deleting files of $path"
     cd ..
     rm -rf navex
   fi
@@ -120,6 +120,9 @@ function install_navex() {
 
     mv navex.sh /usr/local/bin/navex
     mv core /usr/local/bin/navex
+
+    echo "> adding script to environment PATH"
+    export PATH="$PATH:/usr/local/bin/navex"
 
     echo "> adding permissions to navex.sh"
     chmod +x /usr/local/bin/navex/navex.sh
