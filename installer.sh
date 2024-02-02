@@ -11,7 +11,7 @@ function show_progress() {
     local pid=$1
     local delay=0.5
 
-    while ps -p $pid > /dev/null; do
+    while ps -p "$pid" > /dev/null; do
         echo -n "#"
         sleep $delay
     done
@@ -53,8 +53,6 @@ function install_dependencies() {
   # Determine OS name
   os=$(uname)
 
-  #read -rp "> Do you want to do the installation in simulation mode ? (Y/n): " response
-  #response="${response:-y}"
   response=$(question "> Do you want to do the installation in simulation mode?")
 
   echo "> Simulate version: $response"
@@ -70,7 +68,6 @@ function install_dependencies() {
       pkg_manager=$(debian_command "$response")
     fi
 
-    echo ">>> $pkg_manager"
     # install dependencies
     $pkg_manager -y dialog finger expect &
     pid=$!
@@ -89,6 +86,12 @@ function install_dependencies() {
     echo "> Unsupported OS"
     exit 1
   fi
+
+  if [[ "$response" == "y" ]]; then
+    echo "|| Simulate mode is finished ||"
+    exit 1
+  fi
+
 }
 
 function delete_unused_files() {
