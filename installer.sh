@@ -134,16 +134,25 @@ function install_navex() {
 
 }
 
+function uninstall_navex() {
+
+  response=$(question "> Do you want to unInstall navex script from /usr/local/bin/?")
+  if [[ "$response" == "n" ]]; then
+      echo "> Cancelled."
+    else
+      echo "> Deleting files of /usr/local/bin/navex"
+      rm -rf /usr/local/bin/navex
+      echo "> Deleting on PATH"
+      if [[ ":$PATH:" == *":/usr/local/bin/navex:"* ]]; then
+        export PATH=$(echo $PATH | sed -e "s|:$PATH:/usr/local/bin/navex:|:|")
+      fi
+    fi
+}
+
 function start_process() {
 
   if [ -e "/usr/local/bin/navex" ]; then
-    response=$(question "> Do you want to unInstall navex script from /usr/local/bin/?")
-    if [[ "$response" == "n" ]]; then
-        echo "> Cancelled."
-      else
-        echo "> Deleting files of /usr/local/bin/navex"
-        rm -rf /usr/local/bin/navex
-      fi
+    uninstall_navex
   else
     install_dependencies
     install_navex
