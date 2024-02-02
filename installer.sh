@@ -78,9 +78,6 @@ function install_dependencies() {
     # show progress bar
     show_progress $pid
 
-    # add permissions
-    chmod -x ./navex.sh
-
   elif [ "$os" = "Darwin" ]; then
 
     echo "> Mac OSX"
@@ -94,10 +91,21 @@ function install_dependencies() {
   fi
 }
 
-function install_navex() {
-  echo "> adding permissions to navex.sh"
-  chmod +x navex.sh
+function delete_unused_files() {
 
+  response=$(question "> Do you want to delete unused data of Navex?")
+  if [[ "$response" == "n" ]]; then
+    echo "> Cancelled."
+  else
+    path=$(pwd)
+    echo "> Deleting files of $path/navex"
+    cd ..
+    rm -rf navex
+  fi
+
+}
+
+function install_navex() {
   # want to move script ?
   response=$(question "> Do you want to move script to /usr/local/bin/?")
 
@@ -112,21 +120,11 @@ function install_navex() {
 
     mv navex.sh /usr/local/bin/navex
     mv core /usr/local/bin/navex
+
+    echo "> adding permissions to navex.sh"
+    chmod +x /usr/local/bin/navex/navex.sh
+
     delete_unused_files
-  fi
-
-}
-
-function delete_unused_files() {
-
-  response=$(question "> Do you want to move script to /usr/local/bin/?")
-  if [[ "$response" == "n" ]]; then
-    echo "> Cancelled."
-  else
-    path=$(pwd)
-    echo "> Deleting files of $path/navex"
-    cd ..
-    rm -rf navex
   fi
 
 }
@@ -134,7 +132,7 @@ function delete_unused_files() {
 function start_process() {
 
   if [ -e "/usr/local/bin/navex" ]; then
-    response=$(question "> Do you want to move script to /usr/local/bin/?")
+    response=$(question "> Do you want to unInstall navex script from /usr/local/bin/?")
     if [[ "$response" == "n" ]]; then
         echo "> Cancelled."
       else
