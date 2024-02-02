@@ -122,7 +122,9 @@ function install_navex() {
     mv core /usr/local/bin/navex
 
     echo "> adding script to environment PATH"
-    export PATH="$PATH:/usr/local/bin/navex"
+    if [[ ":$PATH:" != *":/usr/local/bin/navex:"* ]]; then
+      export PATH="$PATH:/usr/local/bin/navex"
+    fi
 
     echo "> adding permissions to navex.sh"
     chmod +x /usr/local/bin/navex/navex.sh
