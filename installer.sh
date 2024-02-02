@@ -126,8 +126,10 @@ function install_navex() {
       export PATH="$PATH:/usr/local/bin/navex"
     fi
 
-    echo "> adding permissions to navex.sh"
+    echo "> adding permissions to navex.sh and core"
     chmod +x /usr/local/bin/navex/navex.sh
+    chmod +x /usr/local/bin/navex/core
+    chmod +x /usr/local/bin/navex/core/*
 
     delete_unused_files
   fi
