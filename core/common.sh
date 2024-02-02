@@ -1,5 +1,10 @@
 #!/bin/bash
 
+# only used for debugging
+function pause(){
+   read -p 'Press [Enter] key to continue...' -t 3
+}
+
 function passwordDialog(){
 
   password=$(dialog --title "Login" --clear --passwordbox "Enter your user password:" 10 30 2>&1 >/dev/tty)
@@ -7,8 +12,14 @@ function passwordDialog(){
 
 }
 
-function pause(){
-   read -p 'Press [Enter] key to continue...' -t 3
+function createPwdDialog() {
+  password=$(passwordDialog)
+  if test -z "$password"; then
+      showConfirmationDialog "Operation Cancelled, you will exit from Navex"
+      exit 1
+  fi
+
+  echo "$password"
 }
 
 function showConfirmationDialog(){
@@ -77,20 +88,4 @@ function obtainItemNameFromPosition() {
   local list="$2"
   itemName=$(echo "$list" | awk -F. '{print $1}' | awk -v num=$position 'NR == num {print $2}')
   echo "$itemName"
-}
-
-function trim(){
-  original_string=$1
-  trimmed_string=$(echo "$original_string" | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')
-  echo "$trimmed_string"
-}
-
-function createPwdDialog() {
-  password=$(passwordDialog)
-  if test -z "$password"; then
-      showConfirmationDialog "Operation Cancelled, you will exit from Navex"
-      exit 1
-  fi
-
-  echo "$password"
 }
