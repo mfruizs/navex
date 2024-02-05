@@ -1,10 +1,15 @@
 #!/bin/bash
 
-source ./core/common.sh
-source ./core/ffop.sh
-source ./core/users.sh
-source ./core/grp.sh
-source ./core/cron.sh
+installed_path=.
+if [ -d /usr/local/bin/navex ]; then
+    installed_path=/usr/local/bin/navex
+fi
+
+source $installed_path/core/common.sh
+source $installed_path/core/ffop.sh
+source $installed_path/core/users.sh
+source $installed_path/core/grp.sh
+source $installed_path/core/cron.sh
 
 function browser() {
   path=$(pwd)
