@@ -53,7 +53,7 @@ function install_dependencies() {
   # Determine OS name
   os=$(uname)
 
-  response=$(question "> Do you want to do the installation in simulation mode?")
+  response=$(question "# Do you want to do the installation in simulation mode?")
 
   echo "> Simulate version: $response"
 
@@ -96,7 +96,7 @@ function install_dependencies() {
 
 function delete_unused_files() {
 
-  response=$(question "> Do you want to delete unused data of Navex?")
+  response=$(question "# Do you want to delete unused data of Navex?")
   if [[ "$response" == "n" ]]; then
     echo "> Cancelled."
   else
@@ -110,12 +110,12 @@ function delete_unused_files() {
 
 function install_navex() {
   # want to move script ?
-  response=$(question "> Do you want to move script to /usr/local/bin/?")
+  response=$(question "# Do you want to move script to /usr/local/bin/?")
 
   if [[ "$response" == "n" ]]; then
     echo "> Cancelled."
   else
-    echo "moving files to /usr/local/bin/navex"
+    echo "> moving files to /usr/local/bin/navex"
 
     if [ ! -d /usr/local/bin/navex ]; then
         mkdir -p /usr/local/bin/navex
@@ -141,7 +141,7 @@ function install_navex() {
 
 function uninstall_navex() {
 
-  response=$(question "> Do you want to unInstall navex script from /usr/local/bin/?")
+  response=$(question "# Do you want to Uninstall Navex script from /usr/local/bin/ ?")
   if [[ "$response" == "n" ]]; then
       echo "> Cancelled."
     else
