@@ -18,6 +18,12 @@ Terminal light wright file explorer interface made with dialog.
 sudo git clone https://github.com/mfruizs/navex.git && cd navex && sudo chmod +x installer.sh && sudo ./installer.sh
 ```
 
+* Once the installation is finished, we must execute the following command to be able to use Navex from any part of the system
+
+```shell
+export PATH="$PATH:/usr/local/bin/navex"
+```
+
 ## Running
 
 ```shell

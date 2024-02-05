@@ -129,15 +129,8 @@ function install_navex() {
     chmod +x /usr/local/bin/navex/core
     chmod +x /usr/local/bin/navex/core/*
 
-    # if [[ ":$PATH:" != *":/usr/local/bin/navex:"* ]]; then
-    if echo "$PATH" | grep -q "/usr/local/bin/navex"; then
-        echo "> Navex exists in PATH."
-    else
-        echo "> adding script to environment PATH"
-        export PATH="$PATH:/usr/local/bin/navex"
-    fi
-
     delete_unused_files
+
   fi
 
 }
@@ -150,10 +143,6 @@ function uninstall_navex() {
   elif [[ "$response" == "y" ]]; then
       echo "> Deleting files of /usr/local/bin/navex"
       rm -rf /usr/local/bin/navex
-      echo "> Deleting on PATH"
-      if [[ ":$PATH:" == *":/usr/local/bin/navex:"* ]]; then
-        export PATH=$(echo $PATH | sed -e "s|:$PATH:/usr/local/bin/navex:|:|")
-      fi
   fi
 }
 
