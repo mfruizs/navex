@@ -23,7 +23,7 @@ function red_hat_command() {
   local response=$1
   if [[ "$response" == "n" ]]; then
     pkg_manager="yum install"
-  else
+  elif [[ "$response" == "y" ]]; then
     pkg_manager="yum install --assumeno"
   fi
   echo "$pkg_manager"
@@ -33,7 +33,7 @@ function debian_command() {
   local response=$1
   if [[ "$response" == "n" ]]; then
     pkg_manager="apt install"
-  else
+  elif [[ "$response" == "y" ]]; then
     pkg_manager="apt install --simulate"
   fi
   echo "$pkg_manager"
@@ -43,7 +43,7 @@ function mac_command() {
   local response=$1
   if [[ "$response" == "n" ]]; then
     pkg_manager="brew install"
-  else
+  elif [[ "$response" == "y" ]]; then
     pkg_manager="brew install -s"
   fi
   echo "$pkg_manager"
@@ -53,7 +53,7 @@ function install_dependencies() {
   # Determine OS name
   os=$(uname)
 
-  response=$(question "# Do you want to do the installation in simulation mode?")
+  response=$(question "# Do you want to do the installation in SIMULATION mode ?")
 
   echo "> Simulate version: $response"
 
@@ -88,7 +88,7 @@ function install_dependencies() {
   fi
 
   if [[ "$response" == "y" ]]; then
-    echo "|| Simulate mode is finished ||"
+    echo "|####| Simulate mode is finished |####|"
     exit 1
   fi
 
@@ -96,43 +96,46 @@ function install_dependencies() {
 
 function delete_unused_files() {
 
-  response=$(question "# Do you want to delete unused data of Navex?")
+  response=$(question "# Do you want to keep unused data of Navex ?")
   if [[ "$response" == "n" ]]; then
-    echo "> Cancelled."
-  else
     path=$(pwd)
     echo "> Deleting files of $path"
     cd ..
     rm -rf navex
+  elif [[ "$response" == "y" ]]; then
+    echo "> Keeping files."
   fi
 
 }
 
 function install_navex() {
   # want to move script ?
-  response=$(question "# Do you want to move script to /usr/local/bin/?")
+  response=$(question "# Do you want to copy script to /usr/local/bin/ ?")
 
   if [[ "$response" == "n" ]]; then
     echo "> Cancelled."
-  else
-    echo "> moving files to /usr/local/bin/navex"
+  elif [[ "$response" == "y" ]]; then
+    echo "> coping files to /usr/local/bin/navex"
 
     if [ ! -d /usr/local/bin/navex ]; then
         mkdir -p /usr/local/bin/navex
     fi
 
-    mv navex.sh /usr/local/bin/navex
-    mv core /usr/local/bin/navex
-
-    echo "> adding script to environment PATH"
-    if [[ ":$PATH:" != *":/usr/local/bin/navex:"* ]]; then
-      export PATH="$PATH:/usr/local/bin/navex"
-    fi
+    cp -r navex.sh /usr/local/bin/navex
+    cp -r core /usr/local/bin/navex
 
     echo "> adding permissions to navex.sh and core"
     chmod +x /usr/local/bin/navex/navex.sh
     chmod +x /usr/local/bin/navex/core
     chmod +x /usr/local/bin/navex/core/*
+
+    # if [[ ":$PATH:" != *":/usr/local/bin/navex:"* ]]; then
+    if echo "$PATH" | grep -q "/usr/local/bin/navex"; then
+        echo "> Navex exists in PATH."
+    else
+        echo "> adding script to environment PATH"
+        export PATH="$PATH:/usr/local/bin/navex"
+    fi
 
     delete_unused_files
   fi
@@ -144,14 +147,14 @@ function uninstall_navex() {
   response=$(question "# Do you want to Uninstall Navex script from /usr/local/bin/ ?")
   if [[ "$response" == "n" ]]; then
       echo "> Cancelled."
-    else
+  elif [[ "$response" == "y" ]]; then
       echo "> Deleting files of /usr/local/bin/navex"
       rm -rf /usr/local/bin/navex
       echo "> Deleting on PATH"
       if [[ ":$PATH:" == *":/usr/local/bin/navex:"* ]]; then
         export PATH=$(echo $PATH | sed -e "s|:$PATH:/usr/local/bin/navex:|:|")
       fi
-    fi
+  fi
 }
 
 function start_process() {
